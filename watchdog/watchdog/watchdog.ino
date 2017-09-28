@@ -19,12 +19,14 @@ const int anaRes = 1;         // A1 - ena sidan på LED resistor för att mäta 
 const int anaLed = 2;         // A2 - andra sidan på LED resistor för att mäta ström
 
 // Commands
+String COMMAND_DEBUG = "debug";
+String COMMAND_ECHO = "echo";
 String COMMAND_LDR = "ldr";
 String COMMAND_LED = "led";
+String COMMAND_LED_INFO = "getledinfo";
 String COMMAND_TIME_GET = "gettime";
 String COMMAND_TIME_SET = "settime";
 String COMMAND_TEMP_GET = "gettemp";
-String COMMAND_DEBUG = "debug";
 
 // LED commands
 String COMMAND_LED_ON = "on";
@@ -58,12 +60,18 @@ void loop()
   {
     bool handled=false;
     String cmd = readSerial();
+    if (
     if (cmd.equals(COMMAND_DEBUG)) {
       activateDebug();
       handled=true;
     }
     if (cmd.equals(COMMAND_LDR)) {
       measureLight();
+      handled=true;
+    }
+    if (cmd.equals(COMMAND_LED_INFO)) 
+    {
+      getledinfo();
       handled=true;
     }
     if (cmd.startsWith(COMMAND_LED))
@@ -117,6 +125,7 @@ void activateDebug()
   debug = !debug;
   Serial << "Debugutskrifter " <<  (debug ? "pa" : "av") << endl;
 }
+
 void getTemp()
 {
   //float t = rtc.GetTemperature();
@@ -132,6 +141,13 @@ void getTime()
   String formattedDate = rawDate.substring(6, 10) + "-" + rawDate.substring(3, 5) + "-" + rawDate.substring(0, 2) + " ";
   Serial << formattedDate << rtc.getTimeStr() << endl;
 //  Serial << rtc.getTimeStr() << endl;
+}
+
+void getledinfo()
+{
+  int v1 = analogRead(anaRes);
+  int v2 = analogRead(anaLed);
+  Serial << "Returned values : " << v1 << " " << v2 << endl;
 }
 
 void handleLed(String str)
