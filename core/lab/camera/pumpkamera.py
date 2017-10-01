@@ -97,6 +97,7 @@ class PumpKamera:
 
 
 	def las_settings(self):
+		self.logger.debug("Läser konfigurationsfil")
 		config = configparser.RawConfigParser()
 		config.read('pumpvakt_setting.ini')
 		self.camera.resolution = Resolution().parse(config.get(self.inisektion, "upplosning"))
