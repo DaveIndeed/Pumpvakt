@@ -28,10 +28,6 @@ class Framerate(CameraSetting):
 	values = (natt, dag)
 	currentvalue=natt
 	
-# 	def parse(self, value):
-# 		for i in self.values:
-# 			if value.upper() == i[0].upper():
-# 				self.currentvalue=i
 
 
 class Resolution(CameraSetting):
@@ -43,10 +39,6 @@ class Resolution(CameraSetting):
 	values = (lag, mellan, hog)
 	currentvalue=hog[1]
 
-# 	def parse(self, value):
-# 		for i in self.values:
-# 			if value.upper() == i[0].upper():
-# 				self.currentvalue=i
 
 
 class Zoomfaktor:
@@ -58,10 +50,6 @@ class Zoomfaktor:
 	values = (ingen, lag, mellan, hog)
 	currentvalue=mellan
 
-# 	def parse(self, value):
-# 		for i in self.values:
-# 			if value.upper() == i[0].upper():
-# 				self.currentvalue=i
 
 
 class Vantetid:
@@ -72,10 +60,6 @@ class Vantetid:
 	values = (kort, mellan, lang)
 	currentvalue = mellan
 
-# 	def parse(self, value):
-# 		for i in self.values:
-# 			if value.upper() == i[0].upper():
-# 				self.currentvalue=i
 
 
 class Iso:
@@ -87,13 +71,6 @@ class Iso:
 	values = (iso_100, iso_200, iso_400, iso_800)
 	currentvalue = iso_400
 
-# 	def parse(self, value):
-# 		self.logger.debug("Tolkar värde " + value)
-# 		for i in self.values:
-# 			if value.upper() == i[0].upper():
-# 				self.logger.debug("Hittat match: " + i)
-# 				self.currentvalue=i
-# 		return self.currentvalue[1]
 
 
 class PumpKamera:
@@ -106,12 +83,6 @@ class PumpKamera:
 		self.camera = PiCamera()
 		self.inisektion = "Kamera"
  		self.las_settings()
-# 		self.camera.resolution = self.resolution_hog
-# 		self.camera.brightness = 50
-# 		self.camera.framerate_range = self.framerate_natt
-# 		self.camera.iso = self.iso_200
-# 		self.camera.zoom = self.zoomfaktor_mellan
-# 		self.vantetid = self.vantetid_mellan
 
 
 	def las_settings(self):
@@ -122,15 +93,7 @@ class PumpKamera:
 		self.camera.iso = Iso().parse(config.get(self.inisektion, "iso"))
 		self.camera.zoom = Zoomfaktor().parse(config.get(self.inisektion, "zoomfaktor"))
 		self.vantetid = Vantetid().parse(config.get(self.inisektion, "vantetid"))
-# 		self.logger.debug("Tolkat hastighet : " + hastighet)
-# 		upplosning = config.get("Kamera", "upplosning")
-# 		self.logger.debug("Tolkat Upplösning : " + upplosning)
-# 		zoomfaktor = config.get("Kamera", "zoomfaktor")
-# 		self.logger.debug("Tolkat Zoomfaktor : " + zoomfaktor)
-# 		vantetid = config.get("Kamera", "vantetid")
-# 		self.logger.debug("Tolkat väntetid : " + vantetid)
-# 		iso = config.get("Kamera", "iso")
-# 		self.logger.debug("Tolkat iso : " + iso)
+
 
 	def ta_bild(self, bildfil):
 		logger = logging.getLogger(__name__)
