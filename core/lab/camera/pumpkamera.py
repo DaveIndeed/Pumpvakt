@@ -105,13 +105,13 @@ class PumpKamera:
 		self.logger = logging.getLogger(__name__)
 		self.camera = PiCamera()
 		self.inisektion = "Kamera"
+ 		self.las_settings()
 # 		self.camera.resolution = self.resolution_hog
 # 		self.camera.brightness = 50
 # 		self.camera.framerate_range = self.framerate_natt
 # 		self.camera.iso = self.iso_200
 # 		self.camera.zoom = self.zoomfaktor_mellan
 # 		self.vantetid = self.vantetid_mellan
- 		self.las_settings()
 
 
 	def las_settings(self):
