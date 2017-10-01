@@ -111,7 +111,7 @@ class PumpKamera:
 # 		self.camera.iso = self.iso_200
 # 		self.camera.zoom = self.zoomfaktor_mellan
 # 		self.vantetid = self.vantetid_mellan
-# 		self.las_settings()
+ 		self.las_settings()
 
 
 	def las_settings(self):
