@@ -7,9 +7,10 @@ import configparser
 
 class CameraSetting:
 
-	logger = logging.getLogger(__name__)
-	values = ()
-	currentvalue = None
+	def __init__(self):
+		self.logger = logging.getLogger(self.__class__.__name__)
+		self.values = ()
+		self.currentvalue = None
 	
 	def parse(self, value):
 		self.logger.debug("Tolkar värde " + value)
@@ -24,54 +25,62 @@ class CameraSetting:
 
 class Framerate(CameraSetting):
 
-	logger = logging.getLogger(__name__)
-	natt = ('natt', (Fraction(1, 10), Fraction(1)))
-	dag = ('dag', (Fraction(1, 5), 10))
-	values = (natt, dag)
-	currentvalue=natt
+	def __init__(self):
+		self.logger = logging.getLogger(self.__class__.__name__)
+		natt = ('natt', (Fraction(1, 10), Fraction(1)))
+		dag = ('dag', (Fraction(1, 5), 10))
+		self.values = (natt, dag)
+		self.currentvalue=natt
 	
 
 
 class Resolution(CameraSetting):
-	
-	logger = logging.getLogger(__name__)
-	lag = ('lag', (640, 480))
-	mellan = ('mellan', (1640, 1232))
-	hog = ('hog', (3280, 2464))
-	values = (lag, mellan, hog)
-	currentvalue=hog
+
+	def __init__(self):	
+		self.logger = logging.getLogger(self.__class__.__name__)
+		lag = ('lag', (640, 480))
+		mellan = ('mellan', (1640, 1232))
+		hog = ('hog', (3280, 2464))
+		self.values = (lag, mellan, hog)
+		self.currentvalue=hog
 
 
 
 class Zoomfaktor(CameraSetting):
-	logger = logging.getLogger(__name__)
-	ingen = ('ingen', (0.0, 0.0 ,1.0, 1.0))
-	lag = ('lag', (0.2, 0.2, 0.6, 0.6))
-	mellan = ('mellan', (0.3, 0.3, 0.4, 0.4))
-	hog = ('hog', (0.4, 0.4, 0.2, 0.2))
-	values = (ingen, lag, mellan, hog)
-	currentvalue=mellan
+	
+	def __init__(self):
+		self.logger = logging.getLogger(self.__class__.__name__)
+		ingen = ('ingen', (0.0, 0.0 ,1.0, 1.0))
+		lag = ('lag', (0.2, 0.2, 0.6, 0.6))
+		mellan = ('mellan', (0.3, 0.3, 0.4, 0.4))
+		hog = ('hog', (0.4, 0.4, 0.2, 0.2))
+		self.values = (ingen, lag, mellan, hog)
+		self.currentvalue=mellan
 
 
 
 class Vantetid(CameraSetting):
-	logger = logging.getLogger(__name__)
-	kort = ('kort', 2)
-	mellan = ('mellan', 10)
-	lang = ('lang', 30)
-	values = (kort, mellan, lang)
-	currentvalue = mellan
+	
+	def __init__(self):
+		self.logger = logging.getLogger(self.__class__.__name__)
+		kort = ('kort', 2)
+		mellan = ('mellan', 10)
+		lang = ('lang', 30)
+		self.values = (kort, mellan, lang)
+		self.currentvalue = mellan
 
 
 
 class Iso(CameraSetting):
-	logger = logging.getLogger(__name__)
-	iso_100 = ('100', 100)
-	iso_200 = ('200', 200)
-	iso_400 = ('400', 400)
-	iso_800 = ('800', 800)
-	values = (iso_100, iso_200, iso_400, iso_800)
-	currentvalue = iso_400
+	
+	def __init__(self):
+		self.logger = logging.getLogger(self.__class__.__name__)
+		iso_100 = ('100', 100)
+		iso_200 = ('200', 200)
+		iso_400 = ('400', 400)
+		iso_800 = ('800', 800)
+		self.values = (iso_100, iso_200, iso_400, iso_800)
+		self.currentvalue = iso_400
 
 
 
@@ -81,7 +90,7 @@ class PumpKamera:
 
 	def __init__(self):
 		logging.basicConfig(format='%(asctime)s %(name)s %(levelname)s %(message)s', datefmt='%Y-%m-%d %H:%M:%S', level=logging.DEBUG)
-		self.logger = logging.getLogger(__name__)
+		self.logger = logging.getLogger(self.__class__.__name__)
 		self.camera = PiCamera()
 		self.inisektion = "Kamera"
 		self.las_settings()
@@ -98,13 +107,12 @@ class PumpKamera:
 
 
 	def ta_bild(self, bildfil):
-		logger = logging.getLogger(__name__)
-		logger.info("Mät ljus")
+		self.logger.info("Mät ljus")
 		self.camera.start_preview()
 		sleep(self.vantetid)
-		logger.info("Tar bild")
+		self.logger.info("Tar bild")
 		self.camera.capture(bildfil)
-		logger.info("Klart")
+		self.logger.info("Klart")
 
 
 if __name__ == '__main__':
