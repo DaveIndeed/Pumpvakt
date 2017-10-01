@@ -1,22 +1,23 @@
 from time import sleep
-from datetime import datetime
 from picamera import PiCamera
 from fractions import Fraction
 import logging
+import configparser
 
-def log(message):
-	print (datetime.now().strftime("%Y-%m-%d %H:%M:%S") + " " + message)
-def log(message):
-	print (datetime.now().strftime("%Y-%m-%d %H:%M:%S") + " " + message)
+
+class Framerate:
+	framerate_natt = (Fraction(1, 10), Fraction(1))
+	framerate_dag = (Fraction(1, 5), 10)
+
+
+class Resolution:
+	resolution_lag = (640, 480)
+	resolution_mellan = (1640, 1232)
 
 class PumpKamera:
 	"""Kamerahanering"""
 
-	framerate_natt = (Fraction(1, 10), Fraction(1))
-	framerate_dag = (Fraction(1, 5), 10)
 
-	resolution_low = (640, 480)
-	resolution_medel = (1640, 1232)
 	resolution_hog = (3280, 2464)
 
 	zoomfaktor_ingen = (0.0, 0.0 ,1.0, 1.0)
@@ -37,13 +38,28 @@ class PumpKamera:
 
 	def __init__(self):
 		logging.basicConfig(format='%(asctime)s %(name)s %(levelname)s %(message)s', datefmt='%Y-%m-%d %H:%M:%S', level=logging.DEBUG)
-		logger = logging.getLogger(__name__)
+		self.logger = logging.getLogger(__name__)
 		self.camera.resolution = self.resolution_hog
 		self.camera.brightness = 50
 		self.camera.framerate_range = self.framerate_natt
 		self.camera.iso = self.iso_200
 		self.camera.zoom = self.zoomfaktor_mellan
 		self.vantetid = self.vantetid_mellan
+		self.las_settings()
+
+	def las_settings(self):
+		config = configparser.RawConfigParser()
+		config.read('pumpvakt_setting.ini')
+		hastighet = config.get("Kamera", "hastighet")
+		self.logger.debug("Tolkat hastighet : " + hastighet)
+		upplosning = config.get("Kamera", "upplosning")
+		self.logger.debug("Tolkat Upplösning : " + upplosning)
+		zoomfaktor = config.get("Kamera", "zoomfaktor")
+		self.logger.debug("Tolkat Zoomfaktor : " + zoomfaktor)
+		vantetid = config.get("Kamera", "vantetid")
+		self.logger.debug("Tolkat väntetid : " + vantetid)
+		iso = config.get("Kamera", "iso")
+		self.logger.debug("Tolkat iso : " + iso)
 
 	def ta_bild(self, bildfil):
 		logger = logging.getLogger(__name__)
