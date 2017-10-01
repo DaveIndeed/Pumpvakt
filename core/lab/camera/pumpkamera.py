@@ -14,9 +14,11 @@ class CameraSetting:
 	def parse(self, value):
 		self.logger.debug("Tolkar värde " + value)
 		for i in self.values:
+			self.logger.debug("Jämför med " + i[0])
 			if value.upper() == i[0].upper():
-				self.logger.debug("Hittat match: " + i)
+				self.logger.debug("Hittat match: " + str(i))
 				self.currentvalue=i
+		self.logger.debug("Returnerar " + str(self.currentvalue))
 		return self.currentvalue[1]
 
 
@@ -37,11 +39,11 @@ class Resolution(CameraSetting):
 	mellan = ('mellan', (1640, 1232))
 	hog = ('hog', (3280, 2464))
 	values = (lag, mellan, hog)
-	currentvalue=hog[1]
+	currentvalue=hog
 
 
 
-class Zoomfaktor:
+class Zoomfaktor(CameraSetting):
 	logger = logging.getLogger(__name__)
 	ingen = ('ingen', (0.0, 0.0 ,1.0, 1.0))
 	lag = ('lag', (0.2, 0.2, 0.6, 0.6))
@@ -52,7 +54,7 @@ class Zoomfaktor:
 
 
 
-class Vantetid:
+class Vantetid(CameraSetting):
 	logger = logging.getLogger(__name__)
 	kort = ('kort', 2)
 	mellan = ('mellan', 10)
@@ -62,7 +64,7 @@ class Vantetid:
 
 
 
-class Iso:
+class Iso(CameraSetting):
 	logger = logging.getLogger(__name__)
 	iso_100 = ('100', 100)
 	iso_200 = ('200', 200)
@@ -82,14 +84,14 @@ class PumpKamera:
 		self.logger = logging.getLogger(__name__)
 		self.camera = PiCamera()
 		self.inisektion = "Kamera"
- 		self.las_settings()
+		self.las_settings()
 
 
 	def las_settings(self):
 		config = configparser.RawConfigParser()
 		config.read('pumpvakt_setting.ini')
-		self.camera.resolution = Resolution().parse(config.get(self.inisektion, "hastighet"))
-		self.camera.framerate_range = Framerate().parse(config.get(self.inisektion, "upplosning"))
+		self.camera.resolution = Resolution().parse(config.get(self.inisektion, "upplosning"))
+		self.camera.framerate_range = Framerate().parse(config.get(self.inisektion, "hastighet"))
 		self.camera.iso = Iso().parse(config.get(self.inisektion, "iso"))
 		self.camera.zoom = Zoomfaktor().parse(config.get(self.inisektion, "zoomfaktor"))
 		self.vantetid = Vantetid().parse(config.get(self.inisektion, "vantetid"))
@@ -104,3 +106,7 @@ class PumpKamera:
 		self.camera.capture(bildfil)
 		logger.info("Klart")
 
+
+if __name__ == '__main__':
+	k = PumpKamera()
+	k.ta_bild('bild.png')
