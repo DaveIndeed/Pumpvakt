@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from time import sleep
+import logging
 
 
 
@@ -12,6 +13,7 @@ class Pumpalarm:
     """Tidhållare / Alarm som håller reda på när saker ska utföras"""
     
     def __init__(self):
+        self.logger = logging.getLogger(self.__class__.__name__)
         self.tidenheter = {'Sekund':('seconds',1), 'Minut':('seconds', 60),'Kvart':('seconds', 900), 'Timme':('seconds', 3600), 'Dygn':('days', 1)}
         self.senasteLarmtidpunkt = None
         self.nastaLarmtidpunkt = None

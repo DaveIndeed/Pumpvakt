@@ -109,7 +109,7 @@ class PumpKamera:
 		config = configparser.RawConfigParser()
 		config.read('pumpvakt_setting.ini')
 		self.camera.resolution = Resolution().parse(config.get(self.inisektion, "upplosning", fallback="hog"))
-		self.camera.framerate_range = Framerate().parse(config.get(self.inisektion, "hastighet", fallback="natt"))
+		self.camera.framerate_range = Framerate().parse(config.get(self.inisektion, "ljus", fallback="natt"))
 		self.camera.iso = Iso().parse(config.get(self.inisektion, "iso", fallback="400"))
 		self.camera.zoom = Zoomfaktor().parse(config.get(self.inisektion, "zoomfaktor", fallback="mellan"))
 		self.vantetid = Vantetid().parse(config.get(self.inisektion, "vantetid", fallback="mellan"))
