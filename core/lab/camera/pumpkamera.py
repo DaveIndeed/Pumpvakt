@@ -5,7 +5,9 @@ import logging
 import configparser
 
 
+		
 class CameraSetting:
+	"""Basklass för dataklasser"""
 
 	def __init__(self):
 		self.logger = logging.getLogger(self.__class__.__name__)
@@ -24,6 +26,7 @@ class CameraSetting:
 
 
 class Framerate(CameraSetting):
+	"""Datacontainer inställningar framerate"""
 
 	def __init__(self):
 		self.logger = logging.getLogger(self.__class__.__name__)
@@ -35,6 +38,7 @@ class Framerate(CameraSetting):
 
 
 class Resolution(CameraSetting):
+	"""Datacontainer inställningar upplösning"""
 
 	def __init__(self):	
 		self.logger = logging.getLogger(self.__class__.__name__)
@@ -47,6 +51,7 @@ class Resolution(CameraSetting):
 
 
 class Zoomfaktor(CameraSetting):
+	"""Datacontainer för digitalzoom"""
 	
 	def __init__(self):
 		self.logger = logging.getLogger(self.__class__.__name__)
@@ -60,6 +65,7 @@ class Zoomfaktor(CameraSetting):
 
 
 class Vantetid(CameraSetting):
+	"""Datacontainer för inställningar väntetid. Väntetid anger hur lång tid kameran får på sig för ljusmätning och inställning av gain m.m."""
 	
 	def __init__(self):
 		self.logger = logging.getLogger(self.__class__.__name__)
@@ -72,6 +78,7 @@ class Vantetid(CameraSetting):
 
 
 class Iso(CameraSetting):
+	"""Datacontainer för inställning av ISO"""
 	
 	def __init__(self):
 		self.logger = logging.getLogger(self.__class__.__name__)
@@ -85,7 +92,7 @@ class Iso(CameraSetting):
 
 
 class PumpKamera:
-	"""Kamerahantering"""
+	"""Kamerafunktionalitet"""
 
 
 	def __init__(self):
@@ -100,11 +107,11 @@ class PumpKamera:
 		self.logger.debug("Läser konfigurationsfil")
 		config = configparser.RawConfigParser()
 		config.read('pumpvakt_setting.ini')
-		self.camera.resolution = Resolution().parse(config.get(self.inisektion, "upplosning"))
-		self.camera.framerate_range = Framerate().parse(config.get(self.inisektion, "hastighet"))
-		self.camera.iso = Iso().parse(config.get(self.inisektion, "iso"))
-		self.camera.zoom = Zoomfaktor().parse(config.get(self.inisektion, "zoomfaktor"))
-		self.vantetid = Vantetid().parse(config.get(self.inisektion, "vantetid"))
+		self.camera.resolution = Resolution().parse(config.get(self.inisektion, "upplosning", fallback="hog"))
+		self.camera.framerate_range = Framerate().parse(config.get(self.inisektion, "hastighet", fallback="natt"))
+		self.camera.iso = Iso().parse(config.get(self.inisektion, "iso", fallback="400"))
+		self.camera.zoom = Zoomfaktor().parse(config.get(self.inisektion, "zoomfaktor", fallback="mellan"))
+		self.vantetid = Vantetid().parse(config.get(self.inisektion, "vantetid", fallback="mellan"))
 
 
 	def ta_bild(self, bildfil):
