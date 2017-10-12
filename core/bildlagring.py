@@ -8,7 +8,7 @@ class Bildlagring:
     
     def __init__(self):
         self.filformat=".png"
-        self.rootmapp = Path("~/bilder")
+        self.rootmapp = Path("~/bilder").expanduser()
         
     def getArsmapp(self):
         ar = datetime.now().strftime("%Y")
@@ -28,7 +28,7 @@ class Bildlagring:
            Om katalogen inte existerar skapas den
         """
         
-        path = self.getDagsmapp().expanduser().resolve()
+        path = self.getDagsmapp()
         if not path.exists():
             path.mkdir(parents=True)
         return path
@@ -45,6 +45,10 @@ class Bildlagring:
 
 
 if __name__ == '__main__':
-        b = Bildlagring()
-        print(b.getTidstampel())
-        print(b.getFilnamn())
+    print("Start")
+    b = Bildlagring()
+    print("b")
+    print(b.getTidstampel())
+    print("t")
+    print(b.getFilnamn())
+    print("Klar")
