@@ -1,36 +1,55 @@
 import sys
-import traceback
 import serial
-import datetime
+import logging
 
 
-def log(message):
-	print("%s - %s"%(str(datetime.datetime.now()), message))
+class Ardiunocomm:
 
+	def __init__(self):
+		self.logger = logging.getLogger(self.__class__.__name__)
+		self.logger.debug("Starting, opening serial port");
+		allOk=True
+		self.serialDevice='/dev/ttyACM0'
+		self.serialSpeed=9600
+		try:
+			self.ser = serial.Serial(self.serialDevice, self.serialSpeed)
+		except:
+			allOk=False
+			print("Cannot open serial port")
+			# traceback.print_exc(file=sys.stdout)
+		if not allOk:
+			sys.exit()
+		self.logger.debug("Serial port opened")
+		
 
-log("Starting, opening serial port");
-allOk=True
-try:
-	ser = serial.Serial('/dev/ttyACM0', 9600)
-except:
-	allOk=False
-	print("Cannot open serial port")
-	# traceback.print_exc(file=sys.stdout)
+	def read(self, timeout=10):
 
-if not allOk:
-	sys.exit()
+		self.ser.timeout=timeout
+		self.logger.debug("Trying to read from serial")
+		readstring = self.ser.readline()
+		if (readstring == None):
+			self.logger.debug("Nothing read")
+			return None
+		else:
+			readable = str(readstring, encoding='utf-8')
+			self.logger.debug(readable)
+			return readable
 
-log("Serial port opened")
-ser.timeout=10
-log("Trying to read from serial")
-readstring = ser.readline()
-if (readstring == None):
-	log("Nothing read")
-else:
-	readable = str(readstring, encoding='utf-8')
-	print(readable)
-log("Writing to serial")
-ser.write(bytes('adadsdsadasd', 'utf-8'))
-readstring = ser.readline()
-readable = str(readstring, encoding='utf-8')
-print(readable)
+		
+	def write(self, message):
+		self.logger.debug("Writing to serial")
+		self.ser.write(bytes(message, 'utf-8'))
+
+		
+
+if __name__ == '__main__':
+	print("Öppnar serieport")
+	a = Ardiunocomm()
+	print("Läser från serieport")
+	msg = a.read(10)
+	print(msg)
+	print("Skriver till serieport")
+	a.write("sldfkjsdlkfjsd")
+	msg=a.read()
+	print(msg)
+	
