@@ -46,10 +46,12 @@ if __name__ == '__main__':
 	print("Öppnar serieport")
 	a = Ardiunocomm()
 	print("Läser från serieport")
-	msg = a.read(10)
-	print(msg)
+	msgin = a.read(10)
+	print(" <-- " + msgin)
 	print("Skriver till serieport")
-	a.write("sldfkjsdlkfjsd")
-	msg=a.read()
-	print(msg)
+	msgout = "slfsdkfdjslsdkf";
+	print(" --> " + msgout)
+	a.write(msgout)
+	msgin=a.read()
+	print(" <-- " + msgin)
 	
