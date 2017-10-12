@@ -1,6 +1,7 @@
 import sys
 import serial
 import logging
+from time import sleep
 
 
 class Ardiunocomm:
@@ -40,6 +41,11 @@ class Ardiunocomm:
 		self.logger.debug("Writing to serial")
 		self.ser.write(bytes(message, 'utf-8'))
 
+	def tandLed(self, lednr):
+		self.write("led %d on" % lednr)
+	
+	def slackLed(self, lednr):
+		self.write("led %d off" % lednr)
 		
 
 if __name__ == '__main__':
@@ -60,4 +66,7 @@ if __name__ == '__main__':
 	a.write(msgout)
 	msgin=a.read()
 	print(" <-- " + msgin)
+	a.tandLed(1)
+	sleep(1)
+	a.slackLed(1)
 	
