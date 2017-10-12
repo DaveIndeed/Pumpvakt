@@ -13,7 +13,7 @@ class Huvudslinga:
     def __init__(self):
         self.logger = logging.getLogger(self.__class__.__name__)
         self.alarm = Pumpalarm()
-        self.alarm.konfigurera('Minut', 3)
+        self.alarm.konfigurera("Minut", 3)
         self.alarm.sattNastaLarm()
         self.arduino = Ardiunocomm()
         self.kamera = PumpKamera()
