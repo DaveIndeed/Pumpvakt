@@ -23,9 +23,12 @@ class Pumpalarm:
             raise ValueError("Ogiltig tidenhet " + tidenhet)
         if tidenhet != 'Dygn':
             self.antalDeltaSekunder = self.tidenheter[tidenhet][1] * tidmangd
-            print("Beställd fördröjning: " + self.antalDeltaSekunder + " sekunder")
+            if self.antalDeltaSekunder < 1:
+                raise ValueError("Ogiltig fördröjning. Måste vara minst en sekund")
             if self.antalDeltaSekunder >= 86399:
                 raise ValueError("Ogiltig fördröjning. Fördröjning längre än 24 timmar måste använda enhet Dygn")
+        else:
+            self.antalDeltaSekunder=0
         self.tidenhet = tidenhet
         self.tidmangd = tidmangd
     
@@ -34,28 +37,43 @@ class Pumpalarm:
         
         if self.senasteLarmtidpunkt == None:
             self.senasteLarmtidpunkt = datetime.now()
-        #self.nastaLarmtidpunkt = self.senasteLarmtidpunkt + timedelta(second) 
+        if self.antalDeltaSekunder > 0:
+            self.nastaLarmtidpunkt = self.senasteLarmtidpunkt + timedelta(seconds=self.antalDeltaSekunder)
+        else:
+            self.nastaLarmtidpunkt = self.senasteLarmtidpunkt + timedelta(days=self.tidmangd)
         
     
     def isLarmAktivt(self):
         "Property som signalerar om larm inträffat och inte markerats som hanterat"
-        pass
+        if (self.nastaLarmtidpunkt != None) and (datetime.now() > self.nastaLarmtidpunkt):
+            return True
+        else:
+            return False
     
     def markeraLarmhanterat(self):
         "Markera att larm har hanterats"
-        pass
+        self.nastaLarmtidpunkt = None
+
 
 if __name__ == '__main__':
     p = Pumpalarm()
-    p.konfigurera("sekund", 1)
+    p.konfigurera("Minut", 1)
     p.sattNastaLarm()
+    print("Larm satt till om " + str(p.tidmangd) + " " + p.tidenhet)
     if p.isLarmAktivt():
         print("Fel! Larm ska inte ha inträffat än")
-    sleep(2)
+    else:
+        print("OK! Larm har inte inträffat ännu")
+    print("Väntar så larm ska hinna inträffa")
+    sleep(p.antalDeltaSekunder+1)
     if p.isLarmAktivt():
-        print("Larm aktivt. Markerar som hanterat")
+        print("Larm aktivt, OK!")
+        print("Markerar att larm har hanterats")
         p.markeraLarmhanterat()
     else:
         print("Fel! Larm borde ha aktiverats")
     if p.isLarmAktivt():
         print("Fel! Larm borde vara avaktiverat")
+    else:
+        print("OK! Larm är inte aktiverat")
+    print("Klart")

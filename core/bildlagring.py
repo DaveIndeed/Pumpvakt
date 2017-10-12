@@ -1,4 +1,5 @@
 from datetime import datetime
+from pathlib import Path
 import os
 
 
@@ -7,23 +8,30 @@ class Bildlagring:
     
     def __init__(self):
         self.filformat=".png"
-        self.rootmapp = "~/bilder"
+        self.rootmapp = Path("~/bilder")
         
     def getArsmapp(self):
         ar = datetime.now().strftime("%Y")
-        return os.path.join(self.rootmapp, ar)  
+        return self.rootmapp / ar  
     
     def getManadsmapp(self):
         man = datetime.now().strftime("%m")
-        return os.path.join(self.getArsmapp(), man)  
+        return self.getArsmapp() / man  
         
     def getDagsmapp(self):
         dag = datetime.now().strftime("%d")
-        return os.path.join(self.getManadsmapp(), dag)  
+        return self.getManadsmapp() / dag  
         
     def getFilkatalog(self):
-        """Returnera sökväg till katalog att lagra bild"""
-        return self.getDagsmapp()
+        """
+           Returnera sökväg till katalog att lagra bild
+           Om katalogen inte existerar skapas den
+        """
+        
+        path = self.getDagsmapp().expanduser().resolve()
+        if not path.exists():
+            path.mkdir(parents=True)
+        return path
     
     def getTidstampel(self):
         tid = datetime.now().strftime("%Y%m%d_%H%M")
@@ -33,7 +41,7 @@ class Bildlagring:
         """Returnera filnamn för bild inklusive sökväg"""
         
         filnamn = self.getTidstampel() + self.filformat
-        return os.path.join(self.getFilkatalog(), filnamn)
+        return self.getFilkatalog() / filnamn
 
 
 if __name__ == '__main__':

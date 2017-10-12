@@ -6,7 +6,7 @@ import configparser
 from bildlagring import Bildlagring
 
 
-		
+
 class CameraSetting:
 	"""Basklass för dataklasser"""
 
