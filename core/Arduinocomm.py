@@ -54,4 +54,10 @@ if __name__ == '__main__':
 	a.write(msgout)
 	msgin=a.read()
 	print(" <-- " + msgin)
+	print("Skriver till serieport")
+	msgout = "gettemp";
+	print(" --> " + msgout)
+	a.write(msgout)
+	msgin=a.read()
+	print(" <-- " + msgin)
 	
