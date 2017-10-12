@@ -55,7 +55,7 @@ if __name__ == '__main__':
 	msgin=a.read()
 	print(" <-- " + msgin)
 	print("Skriver till serieport")
-	msgout = "gettemp";
+	msgout = "gettime";
 	print(" --> " + msgout)
 	a.write(msgout)
 	msgin=a.read()
